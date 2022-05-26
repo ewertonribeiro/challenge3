@@ -1,0 +1,16 @@
+version: '3.9'
+services:
+  pg:
+    image: postgres
+    container_name: db
+    ports:
+      - 5431:5432
+    environment:
+      POSTGRES_USER: lucid
+      POSTGRES_PASSWORD: lucid
+      POSTGRES_DB: challenge
+    volumes:
+      - challengedata:/var/lib/postgresql/data
+
+volumes:
+  challengedata:
