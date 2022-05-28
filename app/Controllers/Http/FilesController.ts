@@ -2,16 +2,16 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Application from '@ioc:Adonis/Core/Application'
 import fs from 'node:fs'
 import readline from 'node:readline'
-//import transacao from '../../../app/Models/Transacao'
+import transacao from "../../Models/Transacao"
 
 interface Transacao {
-  bancoOrigem: string
-  agenciaOrigem: number
-  contaOrigem: string
-  bancoDestino: string
-  agenciaDestino: number
-  contaDestino: string
-  valorTransacao: number
+  bancoorigem: string
+  agenciaorigem: number
+  contaorigem: string
+  bancodestino: string
+  agenciadestino: number
+  contadestino: string
+  valortransacao: number
   data: Date
 }
 
@@ -25,24 +25,27 @@ export default class FilesController {
       response.status(400)
       return {
         data: {
-          erro: 'Arquivo Inexistente',
+          erro: true,
+          mensagem:'Arquivo Inexistente'
         }
       }
-    } else if (file.size === 0) {
+      } else if (file.size === 0) {
       response.status(400)
       return {
         data: {
-          error: 'Nao e permitido aruivos vazios',
+          erro: true,
+          mensagem:"O Arquivo nao pode estar vazio!"
         }
       }
-    } else if (file.extname !== 'csv') {
+      } else if (file.extname !== 'csv') {
       response.status(400)
       return {
         data: {
-          erro: 'So e permitido arquivos do tipo .csv',
+          erro: true,
+          mensagem:"So e permitido arquivos do tipo csv!"
         }
       }
-    }
+      }
 
     //Manda Para a parta uploads
     await file.move(Application.tmpPath('uploads'))
@@ -53,8 +56,14 @@ export default class FilesController {
 
     //Converte em um array de transacoes
     const transacoes = await this.readCsv(file.filePath)
+  
+    //A data Da primeira Transacao do arquivo
+    const validDate = this.convertDate(transacoes[0].data)
 
-    console.log(transacoes[0].data === transacoes[1].data)
+    const validTransactionDate = transacoes.filter(transacao=> this.convertDate(transacao.data) == validDate)
+
+    await transacao.createMany(validTransactionDate)
+
     return {
       data: {
         fileName: file.fileName,
@@ -68,13 +77,13 @@ export default class FilesController {
     const values = transacao.split(',')
 
     const t: Transacao = {
-      bancoOrigem: values[0],
-      agenciaOrigem: Number(values[1]),
-      contaOrigem: values[2],
-      bancoDestino: values[3],
-      agenciaDestino: Number(values[4]),
-      contaDestino: values[5],
-      valorTransacao: Number(values[6]),
+      bancoorigem: values[0],
+      agenciaorigem: Number(values[1]),
+      contaorigem: values[2],
+      bancodestino: values[3],
+      agenciadestino: Number(values[4]),
+      contadestino: values[5],
+      valortransacao: Number(values[6]),
       data: new Date(values[7]),
     }
 
@@ -93,5 +102,14 @@ export default class FilesController {
     }
 
     return transacoesDia
+  }
+
+  private convertDate(date:Date){
+    const data = {
+      day:date.getDay(),
+      month:date.getMonth(),
+      year:date.getFullYear()
+    }
+    return `${data.day}/${data.month}/${data.year}`
   }
 }

@@ -5,26 +5,26 @@ export default class Transacao extends BaseModel {
   @column({ isPrimary: true })
   public id: number
 
-  @column({ columnName: 'origem' })
-  public bancoOrigem: string
+  @column()
+  public bancoorigem: string
 
   @column()
-  public agenciaOrigem: number
+  public agenciaorigem: number
 
   @column()
-  public contaOrigem: string
-
-  @column({ columnName: 'destino' })
-  public bancoDestino: string
+  public contaorigem: string
 
   @column()
-  public agenciaDestino: number
+  public bancodestino: string
 
   @column()
-  public contaDestino: string
+  public agenciadestino: number
 
-  @column({ columnName: 'valor' })
-  public valorTransacao: number
+  @column()
+  public contadestino: string
+
+  @column()
+  public valortransacao: number
 
   @column({})
   public data: Date

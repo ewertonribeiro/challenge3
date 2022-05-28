@@ -15,34 +15,31 @@ async function handleSubmit(event) {
 
   inputTransaction.value = ''
   //Exibir a resposta em tela
-  console.log(await response.json())
+  showMessage(await response.json())
 }
 
-
-
-function showMessage(message) {
+function showMessage({data}) {
   // let messages = ['danger','erro',success]
 
   var divMessage = document.getElementById('message')
   var span = document.getElementById('message-span')
 
-  divMessage.classList.remove('hidden')
-  span.textContent = message.data.mensagem
-  // if (message.erro) {
-  //   divMessage.classList.add('message-danger')
-  // } else {
-  //   divMessage.classList.add('message.data.mensagem')
-  // }
-
-  message.data.erro ? divMessage.classList.add('message-danger') :
+  data.erro ? divMessage.classList.add('message-danger') :
     divMessage.classList.add('message-success')
+
+  divMessage.classList.remove('hidden')
+  span.textContent = data.mensagem
+  
 
 
   setTimeout(() => {
     console.log("setTimeout")
+    divMessage.classList.remove('message-danger')
+    divMessage.classList.remove('message-success')
     divMessage.classList.add('hidden')
+
   }, 3000)
 }
 
-showMessage({ data: { erro: true, mensagem: "Ocorreu um erro" } })
+
 
