@@ -2,75 +2,113 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Application from '@ioc:Adonis/Core/Application'
 import fs from 'node:fs'
 import readline from 'node:readline'
-import transacao from "../../Models/Transacao"
+import transacao from '../../Models/Transacao'
+import DaysDone from '../../Models/Importacoes'
 
 interface Transacao {
   bancoorigem: string
-  agenciaorigem: number
+  agenciaorigem: string
   contaorigem: string
   bancodestino: string
-  agenciadestino: number
+  agenciadestino: string
   contadestino: string
   valortransacao: number
   data: Date
 }
 
+class FileError {
+  public data: {
+    erro: boolean
+    mensagem: string
+  }
+
+  constructor(mensagem: string) {
+    this.data = {
+      erro: true,
+      mensagem: mensagem,
+    }
+  }
+}
+
+class FileResponse {
+  public data: {
+    fileName?: string
+    size: number
+    mensagem: string
+  }
+
+  constructor(size: number, fileName?: string) {
+    this.data = {
+      fileName: fileName,
+      size: size,
+      mensagem: 'Upload feito com sucesso!',
+    }
+  }
+}
+
 export default class FilesController {
-  private fileValidationOptions: { extnames: ['csv']; size: '3mb' }
-
   public async store({ request, response }: HttpContextContract) {
-    const file = request.file('file', this.fileValidationOptions)
+    const file = request.file('file', { extnames: ['csv'], size: '3mb' })
 
+    //Valida O Arquivo
     if (!file) {
       response.status(400)
-      return {
-        data: {
-          erro: true,
-          mensagem:'Arquivo Inexistente'
-        }
-      }
-      } else if (file.size === 0) {
+      return new FileError('Arquivo Inexistente')
+    } else if (!file.isValid) {
       response.status(400)
-      return {
-        data: {
-          erro: true,
-          mensagem:"O Arquivo nao pode estar vazio!"
-        }
-      }
-      } else if (file.extname !== 'csv') {
-      response.status(400)
-      return {
-        data: {
-          erro: true,
-          mensagem:"So e permitido arquivos do tipo csv!"
-        }
-      }
-      }
+      return new FileError(
+        'Erro ao fazer o upload , verifique se o arquivo esta vazio ou a extenção é csv!'
+      )
+    }
 
-    //Manda Para a parta uploads
+    //Manda Para a pasta uploads
     await file.move(Application.tmpPath('uploads'))
 
-    if (!file.filePath) {
-      return
-    }
+    if (!file.filePath) return
 
     //Converte em um array de transacoes
     const transacoes = await this.readCsv(file.filePath)
-  
-    //A data Da primeira Transacao do arquivo
+
+    //Data valida da Primeira Transação
     const validDate = this.convertDate(transacoes[0].data)
 
-    const validTransactionDate = transacoes.filter(transacao=> this.convertDate(transacao.data) == validDate)
+    //A data Da primeira Transacao do arquivo
+    if (!(await this.validateTransactionsDate(validDate)))
+      return new FileError('Ja foram registradas transações nesta data')
 
-    await transacao.createMany(validTransactionDate)
+    //Filtra as Transacoes
+    const validTransactions = this.filterTransactions(transacoes, validDate)
 
-    return {
-      data: {
-        fileName: file.fileName,
-        size: file.size,
-        mensagem: 'Upload Feito Com Sucesso',
-      },
+    //Inserção no banco de Dados
+    try {
+      await transacao.createMany(validTransactions)
+      await DaysDone.create({
+        done: true,
+        date: validDate,
+        totaltransacoes: validTransactions.length,
+      })
+    } catch {
+      return new FileError('Problema ao Insesir no Banco , Verifique o Arquivo e tente novamente.')
     }
+
+    return new FileResponse(file.size, file.fileName)
+  }
+
+  private filterTransactions(transacoes: Transacao[], validDate: string) {
+    return transacoes
+      .filter((transacao) => this.convertDate(transacao.data) === validDate)
+      .filter((transacao) => {
+        const values = Object.values(transacao).findIndex((item) => !item)
+
+        if (values < 0) return transacao
+      })
+  }
+
+  private async validateTransactionsDate(validDate: string) {
+    const daysAlreadyDone = await DaysDone.findBy('date', validDate)
+
+    if (daysAlreadyDone) return false
+    else return true
   }
 
   private convertToJson(transacao: string): Transacao {
@@ -78,10 +116,10 @@ export default class FilesController {
 
     const t: Transacao = {
       bancoorigem: values[0],
-      agenciaorigem: Number(values[1]),
+      agenciaorigem: values[1],
       contaorigem: values[2],
       bancodestino: values[3],
-      agenciadestino: Number(values[4]),
+      agenciadestino: values[4],
       contadestino: values[5],
       valortransacao: Number(values[6]),
       data: new Date(values[7]),
@@ -104,12 +142,7 @@ export default class FilesController {
     return transacoesDia
   }
 
-  private convertDate(date:Date){
-    const data = {
-      day:date.getDay(),
-      month:date.getMonth(),
-      year:date.getFullYear()
-    }
-    return `${data.day}/${data.month}/${data.year}`
+  private convertDate(date: Date) {
+    return `${date.getUTCDate()}/${date.getUTCMonth() + 1}/${date.getFullYear()}`
   }
 }

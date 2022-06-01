@@ -1,20 +1,15 @@
 import BaseSchema from '@ioc:Adonis/Lucid/Schema'
 
-export default class Transacoes extends BaseSchema {
-  protected tableName = 'transacaos'
+export default class Importacaos extends BaseSchema {
+  protected tableName = 'importacaos'
 
   public async up() {
     this.schema.createTable(this.tableName, (table) => {
       table.increments('id')
 
-      table.string('bancoorigem')
-      table.string('agenciaorigem')
-      table.string('contaorigem')
-      table.string('bancodestino')
-      table.string('agenciadestino')
-      table.string('contadestino')
-      table.float('valortransacao')
-      table.date('data')
+      table.string('date')
+      table.boolean('done')
+      table.integer('totaltransacoes')
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */

@@ -22,3 +22,4 @@ import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async ({ view }) => view.render('home'))
 Route.post('/api/upload', 'FilesController.store')
+Route.get('/api/importacoes', 'ImportacoesController.index')

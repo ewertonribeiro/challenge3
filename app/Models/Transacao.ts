@@ -9,7 +9,7 @@ export default class Transacao extends BaseModel {
   public bancoorigem: string
 
   @column()
-  public agenciaorigem: number
+  public agenciaorigem: string
 
   @column()
   public contaorigem: string
@@ -18,7 +18,7 @@ export default class Transacao extends BaseModel {
   public bancodestino: string
 
   @column()
-  public agenciadestino: number
+  public agenciadestino: string
 
   @column()
   public contadestino: string
