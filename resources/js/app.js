@@ -1,9 +1,8 @@
 import '../css/app.css'
-import './signup'
 
-var form = document.querySelector('form')
+var form = document.getElementById('upload-form')
 var inputTransaction = document.querySelector('input')
-
+alert("alert")
 form.addEventListener('submit', handleSubmit)
 
 async function handleSubmit(event) {
@@ -70,9 +69,8 @@ function formatDate(date) {
   const dataImportacao = new Date(date)
 
   //Formata a data
-  const data = `${dataImportacao.getUTCDate()}/${
-    dataImportacao.getMonth() + 1
-  }/${dataImportacao.getFullYear()} - ${dataImportacao.getHours()}:${dataImportacao.getMinutes()}:${dataImportacao.getSeconds()}`
+  const data = `${dataImportacao.getUTCDate()}/${dataImportacao.getMonth() + 1
+    }/${dataImportacao.getFullYear()} - ${dataImportacao.getHours()}:${dataImportacao.getMinutes()}:${dataImportacao.getSeconds()}`
 
   return data
 }
@@ -89,3 +87,6 @@ function clear() {
 }
 
 show_importacoes()
+
+
+

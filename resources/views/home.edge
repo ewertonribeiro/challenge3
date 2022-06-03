@@ -12,7 +12,7 @@
 <body>
   <div class="transacoes">
     <h1 class="transacoes-title">Importar Transções</h1>
-    <form class="transacoes-form">
+    <form class="transacoes-form" id="upload-form">
       <input type="file" name="file" id="file">
       <label for="file">Selecione o Arquivo para upload</label>
       <button type="submit" class="submit-button" id="submit-button">Submit</button>
@@ -25,7 +25,7 @@
 
   <div class="table-container">
     <table id="table" class="table">
-      <thead >
+      <thead>
         <h1 class="table-title">Importações Realizadas</h1>
       </thead>
       <tbody class="table-body" id="tbody">

@@ -1,0 +1,2 @@
+#Clear
+alias cl=clear

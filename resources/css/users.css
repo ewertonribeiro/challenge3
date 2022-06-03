@@ -27,6 +27,12 @@
   width: 100%;
 }
 
+
+.users-table .users-tbody {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 .users-thead tr{
   display: flex;
 }
@@ -44,6 +50,7 @@
 .users-tbody tr td:first-of-type {
   width: 20%;
 }
+
 .users-tbody .users-tr {
   display: flex;
 }
