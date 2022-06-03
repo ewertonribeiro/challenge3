@@ -23,3 +23,8 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.get('/', async ({ view }) => view.render('home'))
 Route.post('/api/upload', 'FilesController.store')
 Route.get('/api/importacoes', 'ImportacoesController.index')
+
+//Users
+Route.get('/signup', async ({ view }) => view.render('signup'))
+Route.get('/users', async ({ view }) => view.render('users'))
+Route.resource('/api/users', 'UsersController').apiOnly()

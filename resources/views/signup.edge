@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AdonisJS - A fully featured web framework for Node.js</title>
+  @entryPointStyles('app')
+  @entryPointScripts('app')
+</head>
+
+<body>
+  <div class="signup-container" id="user-form-container">
+    <div class="title">
+      <h1>Cadastras Usuário</h1>
+    </div>
+    <form class="user-form" id="user-form">
+      <label for="name">Nome</label>
+      <input type="text" name="name" id="user-name">
+
+      <label for="email">Email</label>
+      <input type="email" name="email" id="user-email">
+
+      <div class="btn-container">
+        <button type="submit" class="user-btn" id="user-btn">Cadastrar</button>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>

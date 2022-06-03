@@ -1,4 +1,5 @@
 import '../css/app.css'
+import './signup'
 
 var form = document.querySelector('form')
 var inputTransaction = document.querySelector('input')
