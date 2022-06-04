@@ -1,22 +1,19 @@
 // import {clear} from "./utils/functions"
-import {updateUi} from './utils/classes'
+import { updateUi } from './utils/classes'
 
 const tbody = document.querySelector('tbody')
-const {requestGET} = new updateUi(tbody)
+const { requestServer } = new updateUi(tbody)
 
 async function getAllusers() {
-  
-  const users = await requestGET('get','/api/users')
+  const users = await requestServer('get', '/api/users')
 
   users.forEach(({ id, email, name }) => {
-
     let tr = document.createElement('tr')
 
     tr.classList.add('users-tr')
     tr.id = 'users-tr'
 
-    tr.innerHTML =
-      `
+    tr.innerHTML = `
     <tr class="users-tr" id="users-tr">
             <td>${id}</td>
             <td>${name}</td>
@@ -30,15 +27,11 @@ async function getAllusers() {
           </tr>
       `
 
-
     tbody.append(tr)
   })
-
-
 }
 
 getAllusers()
-
 
 // function clear() {
 //   let tbody = document.querySelector('tbody')
@@ -46,4 +39,3 @@ getAllusers()
 //   tbody.innerHTML = ` <tbody class="users-tbody" id="users-tbody"></tbody>
 // `
 // }
-

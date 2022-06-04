@@ -1,25 +1,24 @@
 import '../css/app.css'
 import { updateUi } from './utils/classes'
-import {clear} from "./utils/functions"
-
+import { clear } from './utils/functions'
 
 var form = document.getElementById('upload-form')
 var inputTransaction = document.querySelector('input')
 
 const tbody = document.querySelector('tbody')
-const {requestGET , requestPOST} = new updateUi(tbody)
+const { requestServer } = new updateUi(tbody)
 
 form.addEventListener('submit', handleSubmit)
 
 async function handleSubmit(event) {
   event.preventDefault()
-  
-  const response = await requestPOST('post' , '/api/upload' , new FormData(this))
+
+  const response = await requestServer('post', '/api/upload', new FormData(this))
 
   inputTransaction.value = ''
   //Exibir a resposta em tela
   showMessage(response)
-  clear('importacoes' , tbody)
+  clear('importacoes', tbody)
   show_importacoes()
 }
 
@@ -45,9 +44,8 @@ function showMessage({ data }) {
 }
 
 async function show_importacoes() {
- 
-  const importacoes = await requestGET('get','/api/importacoes')
-  
+  const importacoes = await requestServer('get', '/api/importacoes')
+
   //Adiciona Os valores na ui
   importacoes.forEach(({ data: { dataTransacao, dataImportacao } }) => {
     let tr = document.createElement('tr')
@@ -70,15 +68,11 @@ function formatDate(date) {
   const dataImportacao = new Date(date)
 
   //Formata a data
-  const data = `${dataImportacao.getUTCDate()}/${dataImportacao.getMonth() + 1
-    }/${dataImportacao.getFullYear()} - ${dataImportacao.getHours()}:${dataImportacao.getMinutes()}:${dataImportacao.getSeconds()}`
+  const data = `${dataImportacao.getUTCDate()}/${
+    dataImportacao.getMonth() + 1
+  }/${dataImportacao.getFullYear()} - ${dataImportacao.getHours()}:${dataImportacao.getMinutes()}:${dataImportacao.getSeconds()}`
 
   return data
 }
 
-
-
 show_importacoes()
-
-
-
