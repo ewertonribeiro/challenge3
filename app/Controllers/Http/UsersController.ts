@@ -10,4 +10,22 @@ export default class UsersController {
     return await this.model.all()
 
   }
+
+
+  async store({ request }: HttpContextContract) {
+
+    const { email, name } = request.body()
+
+    if (!email || !name) {
+      return {
+        data: {
+          mensagem: "Nome e email são Obrigatórios!"
+        },
+        erro: true
+      }
+    }
+
+    const user = await User.create({ name, email, senha: '123456' })
+    return user
+  }
 }

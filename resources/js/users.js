@@ -1,10 +1,12 @@
+// import {clear} from "./utils/functions"
+import {updateUi} from './utils/classes'
 
+const tbody = document.querySelector('tbody')
+const {requestGET} = new updateUi(tbody)
 
 async function getAllusers() {
-  const tbody = document.querySelector('tbody')
-
-  const response = await fetch('/api/users')
-  const users = await response.json()
+  
+  const users = await requestGET('get','/api/users')
 
   users.forEach(({ id, email, name }) => {
 
@@ -38,10 +40,10 @@ async function getAllusers() {
 getAllusers()
 
 
-function clear() {
-  let tbody = document.querySelector('tbody')
+// function clear() {
+//   let tbody = document.querySelector('tbody')
 
-  tbody.innerHTML = ` <tbody class="users-tbody" id="users-tbody"></tbody>
-`
-}
+//   tbody.innerHTML = ` <tbody class="users-tbody" id="users-tbody"></tbody>
+// `
+// }
 
