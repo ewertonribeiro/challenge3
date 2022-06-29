@@ -1,5 +1,7 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
+import generateRandomPass from 'App/utils/functions/generatePassword'
+
 
 export default class UsersController {
 
@@ -25,7 +27,9 @@ export default class UsersController {
       }
     }
 
-    const user = await User.create({ name, email, senha: '123456' })
+    const senha = generateRandomPass();
+
+    const user = await User.create({ name, email, senha })
     return user
   }
 }
