@@ -18,7 +18,7 @@ class ImportacaoResponse {
 export default class ImportacoesController {
   private model = Importacao
 
-  public async index({ response }: HttpContextContract) {
+  public async index({ }: HttpContextContract) {
     const importacoes = await this.model.all()
 
     const returnedImportacoes = importacoes.map((importacao) => {

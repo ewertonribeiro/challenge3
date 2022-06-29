@@ -1,22 +1,24 @@
 import '../css/app.css'
+import { updateUi } from './utils/classes'
+import { clear } from './utils/functions'
 
-var form = document.querySelector('form')
+var form = document.getElementById('upload-form')
 var inputTransaction = document.querySelector('input')
+
+const tbody = document.querySelector('tbody')
+const { requestServer } = new updateUi(tbody)
 
 form.addEventListener('submit', handleSubmit)
 
 async function handleSubmit(event) {
   event.preventDefault()
 
-  const response = await fetch('/api/upload', {
-    method: 'post',
-    body: new FormData(this),
-  })
+  const response = await requestServer('post', '/api/upload', new FormData(this))
 
   inputTransaction.value = ''
   //Exibir a resposta em tela
-  showMessage(await response.json())
-  clear()
+  showMessage(response)
+  clear('importacoes', tbody)
   show_importacoes()
 }
 
@@ -42,10 +44,7 @@ function showMessage({ data }) {
 }
 
 async function show_importacoes() {
-  const response = await fetch('/api/importacoes')
-  const importacoes = await response.json()
-
-  const tbody = document.querySelector('tbody')
+  const importacoes = await requestServer('get', '/api/importacoes')
 
   //Adiciona Os valores na ui
   importacoes.forEach(({ data: { dataTransacao, dataImportacao } }) => {
@@ -74,17 +73,6 @@ function formatDate(date) {
   }/${dataImportacao.getFullYear()} - ${dataImportacao.getHours()}:${dataImportacao.getMinutes()}:${dataImportacao.getSeconds()}`
 
   return data
-}
-
-function clear() {
-  const tbody = document.querySelector('tbody')
-
-  tbody.innerHTML = `
-  <tr class="row-names" id="row-names">
-  <td>Data das Transações</td>
-  <td>Data da Importação</td>
-  </tr>
-  `
 }
 
 show_importacoes()

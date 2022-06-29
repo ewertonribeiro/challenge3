@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AdonisJS - A fully featured web framework for Node.js</title>
+  @entryPointStyles('app')
+  @entryPointScripts('users')
+</head>
+
+<body>
+
+  <div class="users-container">
+    <div class="users-title">
+      <h1>Usuarios Cadastrados</h1>
+    </div>
+
+    <div class="users-table-container">
+
+      <a href="/signup" class="new-user" id="new-user">Novo</a>
+
+      <table class="users-table" id="users-table">
+
+        <thead class="users-thead" id="users-thead">
+
+          <tr>
+            <td class="user-id">ID</td>
+            <td class="user-nome">NOME</td>
+            <td class="user-email">EMAIL</td>
+            <td class="user-opcoes">OPÇÕES</td>
+          </tr>
+        </thead>
+
+        <tbody class="users-tbody" id="users-tbody">
+
+        </tbody>
+
+      </table>
+
+    </div>
+  </div>
+</body>
+
+</html>
