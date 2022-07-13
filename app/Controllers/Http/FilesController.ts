@@ -4,6 +4,7 @@ import fs from 'node:fs'
 import readline from 'node:readline'
 import transacao from '../../Models/Transacao'
 import DaysDone from '../../Models/Importacoes'
+import { MyError, FileResponse } from './../../utils/classes/Responses/MyResponses'
 
 interface Transacao {
   bancoorigem: string
@@ -16,36 +17,6 @@ interface Transacao {
   data: Date
 }
 
-class FileError {
-  public data: {
-    erro: boolean
-    mensagem: string
-  }
-
-  constructor(mensagem: string) {
-    this.data = {
-      erro: true,
-      mensagem: mensagem,
-    }
-  }
-}
-
-class FileResponse {
-  public data: {
-    fileName?: string
-    size: number
-    mensagem: string
-  }
-
-  constructor(size: number, fileName?: string) {
-    this.data = {
-      fileName: fileName,
-      size: size,
-      mensagem: 'Upload feito com sucesso!',
-    }
-  }
-}
-
 export default class FilesController {
   public async store({ request, response }: HttpContextContract) {
     const file = request.file('file', { extnames: ['csv'], size: '3mb' })
@@ -53,10 +24,10 @@ export default class FilesController {
     //Valida O Arquivo
     if (!file) {
       response.status(400)
-      return new FileError('Arquivo Inexistente')
+      return new MyError('Arquivo Inexistente')
     } else if (!file.isValid) {
       response.status(400)
-      return new FileError(
+      return new MyError(
         'Erro ao fazer o upload , verifique se o arquivo esta vazio ou a extenção é csv!'
       )
     }
@@ -74,7 +45,7 @@ export default class FilesController {
 
     //A data Da primeira Transacao do arquivo
     if (!(await this.validateTransactionsDate(validDate)))
-      return new FileError('Ja foram registradas transações nesta data')
+      return new MyError('Ja foram registradas transações nesta data')
 
     //Filtra as Transacoes
     const validTransactions = this.filterTransactions(transacoes, validDate)
@@ -88,10 +59,10 @@ export default class FilesController {
         totaltransacoes: validTransactions.length,
       })
     } catch {
-      return new FileError('Problema ao Insesir no Banco , Verifique o Arquivo e tente novamente.')
+      return new MyError('Problema ao Insesir no Banco , Verifique o Arquivo e tente novamente.')
     }
 
-    return new FileResponse(file.size, file.fileName)
+    return new FileResponse('Upload feito com sucesso!',file.size, file.fileName)
   }
 
   private filterTransactions(transacoes: Transacao[], validDate: string) {

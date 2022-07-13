@@ -1,3 +1,5 @@
+import {showMessage} from "./utils/functions/showMessage"
+
 
 var signupForm = document.getElementById('user-form')
 
@@ -11,6 +13,5 @@ async function handleSubmit(event) {
     body: new FormData(this),
   })
 
-  console.log(await response.json())
-
+  showMessage(await response.json())
 }

@@ -1,6 +1,7 @@
 import '../css/app.css'
-import { updateUi } from './utils/classes'
-import { clear } from './utils/functions'
+import { showMessage } from './utils/functions/showMessage'
+import { updateUi } from './utils/classes/updateUi'
+import { clear } from './utils/functions/clear'
 
 var form = document.getElementById('upload-form')
 var inputTransaction = document.querySelector('input')
@@ -20,27 +21,6 @@ async function handleSubmit(event) {
   showMessage(response)
   clear('importacoes', tbody)
   show_importacoes()
-}
-
-function showMessage({ data }) {
-  // let messages = ['danger','erro',success]
-
-  var divMessage = document.getElementById('message')
-  var span = document.getElementById('message-span')
-
-  data.erro
-    ? divMessage.classList.add('message-danger')
-    : divMessage.classList.add('message-success')
-
-  divMessage.classList.remove('hidden')
-  span.textContent = data.mensagem
-
-  setTimeout(() => {
-    console.log('setTimeout')
-    divMessage.classList.remove('message-danger')
-    divMessage.classList.remove('message-success')
-    divMessage.classList.add('hidden')
-  }, 3000)
 }
 
 async function show_importacoes() {

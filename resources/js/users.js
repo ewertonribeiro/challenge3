@@ -1,5 +1,5 @@
 // import {clear} from "./utils/functions"
-import { updateUi } from './utils/classes'
+import { updateUi } from './utils/classes/updateUi'
 
 const tbody = document.querySelector('tbody')
 const { requestServer } = new updateUi(tbody)
