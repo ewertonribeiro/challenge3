@@ -16,6 +16,10 @@ export default class Users extends BaseSchema {
       table.timestamp('created_at', { useTz: true })
       table.timestamp('updated_at', { useTz: true })
     })
+
+    // this.defer(async db=> {
+    //   await db.table('users').insert({name:'Admin',email:'admin@email.com.br',senha:'123999'});
+    // })
   }
 
   public async down() {

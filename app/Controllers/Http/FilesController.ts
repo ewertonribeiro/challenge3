@@ -58,11 +58,11 @@ export default class FilesController {
         date: validDate,
         totaltransacoes: validTransactions.length,
       })
+      return new FileResponse('Upload feito com sucesso!', file.size, file.fileName)
     } catch {
       return new MyError('Problema ao Insesir no Banco , Verifique o Arquivo e tente novamente.')
     }
 
-    return new FileResponse('Upload feito com sucesso!',file.size, file.fileName)
   }
 
   private filterTransactions(transacoes: Transacao[], validDate: string) {

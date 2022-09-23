@@ -1,12 +1,11 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
-import Encrypt from 'App/utils/classes/encrypt'
-import generateRandomPass from 'App/utils/functions/generatePassword'
+import Password from 'App/utils/classes/Password'
 import { MyError, UserResponse } from '../../utils/classes/Responses/MyResponses'
 
 export default class UsersController {
   private model = User
-  private passFunction = new Encrypt()
+  private passFunction = new Password()
 
   async index({ response }: HttpContextContract) {
     response.status(200)
@@ -14,7 +13,7 @@ export default class UsersController {
   }
 
   async store({ request }: HttpContextContract) {
-    const { email, name } = request.body()
+    const { email, name } = request.body() as {email:string,name:string}
 
     if (!email || !name) {
       return new MyError('Nome e email são Obrigatórios!')
@@ -24,10 +23,9 @@ export default class UsersController {
       return new MyError('Email ja cadastrado na Base de Dados!')
     }
 
-    const senha = generateRandomPass()
-    const passHash = await this.passFunction.encrypt(senha)
+    const senha = await this.passFunction.new()
 
-    await this.model.create({ name, email, senha: passHash })
+    await this.model.create({ name, email, senha })
     return new UserResponse('Usuario cadastrado com sucesso!')
   }
 }

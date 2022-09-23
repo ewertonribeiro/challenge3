@@ -1,4 +1,4 @@
-export default class Data {
+export default class Response {
   protected data: {
     error: boolean
     message: string
