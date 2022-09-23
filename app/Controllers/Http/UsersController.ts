@@ -9,11 +9,14 @@ export default class UsersController {
 
   async index({ response }: HttpContextContract) {
     response.status(200)
-    return await this.model.all()
+
+    //Filtra o Usuario Admin
+    const filteredUsers = await this.model.all()
+    return filteredUsers.filter(user=>user.name !== 'Admin')
   }
 
   async store({ request }: HttpContextContract) {
-    const { email, name } = request.body() as {email:string,name:string}
+    const { email, name } = request.body() as { email: string, name: string }
 
     if (!email || !name) {
       return new MyError('Nome e email são Obrigatórios!')
@@ -23,7 +26,7 @@ export default class UsersController {
       return new MyError('Email ja cadastrado na Base de Dados!')
     }
 
-    const senha = await this.passFunction.new()
+    const senha = this.passFunction.newPassString();
 
     await this.model.create({ name, email, senha })
     return new UserResponse('Usuario cadastrado com sucesso!')

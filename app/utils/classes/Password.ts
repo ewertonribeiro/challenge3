@@ -2,7 +2,7 @@ import { compare, hash } from "bcrypt"
 
 export default class Password {
 
-  private newPassString(): string {
+  public newPassString(): string {
     let pass = '';
     while (pass.length < 6) {
       const randomNumber = Math.floor(Math.random() * 9)
