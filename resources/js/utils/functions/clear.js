@@ -2,7 +2,7 @@
 function clear(table , tbody){
 
     if(table === "users"){
-        tbody.innerHTML = ` <tbody class="users-tbody" id="users-tbody"></tbody>`
+        tbody.innerHTML = ` <tbody class="mt-1" id="users-tbody"></tbody>`
 
     }else if(table === "importacoes"){
 
