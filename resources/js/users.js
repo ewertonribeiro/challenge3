@@ -10,18 +10,32 @@ async function getAllusers() {
   users.forEach(({ id, email, name }) => {
     let tr = document.createElement('tr')
 
-    tr.classList.add('users-tr')
+    tr.className = ''
     tr.id = 'users-tr'
 
     tr.innerHTML = `
-    <tr class="users-tr" id="users-tr">
+    <tr  id="users-tr">
             <td>${id}</td>
             <td>${name}</td>
             <td>${email}</td>
             <td>
               <div class="users-table-btns">
-                <button type="button" class="btn-editar" id="btn-editar">Editar</button>
-                <button type="button" class="btn-remover" id="btn-remover">Remover</button>
+                <button
+                  type="button"
+                  class="btn btn-info btn-sm"
+                  id="btn-editar"
+                  >
+                  <i class="fa-solid fa-user-pen"></i>
+                  Editar
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  id="btn-remover"
+                  >
+                  <i class="fa-solid fa-trash"></i>
+                  Remover
+                </button>
               </div>
             </td>
           </tr>

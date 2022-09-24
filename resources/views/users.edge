@@ -4,27 +4,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <title>AdonisJS - A fully featured web framework for Node.js</title>
-  @entryPointStyles('app')
+  <!-- @entryPointStyles('app') -->
   @entryPointScripts('users')
 </head>
 
 <body>
 
-  <div class="users-container">
-    <div class="users-title">
+  <div
+    class="
+      container
+      mt-5
+      mx-auto
+      text-center
+    "
+
+  >
+    <div class="">
       <h1>Usuarios Cadastrados</h1>
     </div>
 
-    <div class="users-table-container">
+    <div
+      class="
+        d-flex
+        flex-column
+      "
+    >
 
-      <a href="/signup" class="new-user" id="new-user">Novo</a>
+      <a
+        href="/signup"
+        class="
+          btn
+          btn-primary
+          align-self-start
+          mb-4
+          mt-4
+          fw-bold
+        "
+        id="new-user"
+        >
+        Novo
+        <i class="fa-solid fa-person-circle-plus"></i>
+      </a>
 
-      <table class="users-table" id="users-table">
+      <table class="container " id="users-table">
 
-        <thead class="users-thead" id="users-thead">
+        <thead class="container"  id="users-thead">
 
-          <tr>
+          <tr class="fw-bold fs-4 ">
             <td class="user-id">ID</td>
             <td class="user-nome">NOME</td>
             <td class="user-email">EMAIL</td>
@@ -32,7 +60,9 @@
           </tr>
         </thead>
 
-        <tbody class="users-tbody" id="users-tbody">
+        <tbody
+          class="mt-1"
+          id="users-tbody">
 
         </tbody>
 
@@ -40,6 +70,14 @@
 
     </div>
   </div>
+
+
+<!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/ab5118b9cd.js" crossorigin="anonymous"></script>
+
+<!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
 </body>
 
 </html>

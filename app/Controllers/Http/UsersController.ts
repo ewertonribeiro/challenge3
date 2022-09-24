@@ -31,4 +31,17 @@ export default class UsersController {
     await this.model.create({ name, email, senha })
     return new UserResponse(`Usuario cadastrado.Sua senha e : ${senha}`)
   }
+
+  async destroy({response,request}:HttpContextContract) {
+    const id = request.param('id') as string
+
+    //Verificar se o usuario existe
+    //Verificar se e do admin e nao remover
+    //Verificar se e o id do usuario logado e nao remover
+
+    //Apagar o usuario => torna-lo inativo
+
+    //retornar a resposta
+    return response.json({id})
+  }
 }

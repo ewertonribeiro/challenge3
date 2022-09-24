@@ -13,13 +13,13 @@ form.addEventListener('submit', handleSubmit)
 
 async function handleSubmit(event) {
   event.preventDefault()
-
   const response = await requestServer('post', '/api/upload', new FormData(this))
 
   inputTransaction.value = ''
   //Exibir a resposta em tela
   const message = new Message(response);
   message.showMessage();
+
   clear('importacoes', tbody)
   show_importacoes()
 }
@@ -29,11 +29,11 @@ async function show_importacoes() {
 
   //Adiciona Os valores na ui
   importacoes.forEach(({ data: { dataTransacao, dataImportacao } }) => {
-    let tr = document.createElement('tr')
-    tr.classList.add('tr-values')
+    const tr = document.createElement('tr')
+    tr.className = 'd-flex justify-content-between py-1 px-2 fs-4 fw-normal'
 
-    let tdTransacao = document.createElement('td')
-    let tdImportacao = document.createElement('td')
+    const tdTransacao = document.createElement('td')
+    const tdImportacao = document.createElement('td')
 
     tdTransacao.innerText = dataTransacao
     tdImportacao.innerText = formatDate(dataImportacao)
