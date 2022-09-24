@@ -1,31 +1,35 @@
 import '../css/app.css'
-import Message from './utils/classes/showMessage';
-import { updateUi } from './utils/classes/updateUi'
+import Message from './utils/classes/showMessage'
 import { clear } from './utils/functions/clear'
 
-var form = document.getElementById('upload-form')
-var inputTransaction = document.querySelector('input')
+const form = document.getElementById('upload-form')
+const inputTransaction = document.querySelector('input')
 
 const tbody = document.querySelector('tbody')
-const { requestServer } = new updateUi(tbody)
 
 form.addEventListener('submit', handleSubmit)
 
 async function handleSubmit(event) {
   event.preventDefault()
-  const response = await requestServer('post', '/api/upload', new FormData(this))
+  const response = await (
+    await fetch('/api/upload', {
+      method: 'POST',
+      body: new FormData(this),
+    })
+  ).json()
 
   inputTransaction.value = ''
   //Exibir a resposta em tela
-  const message = new Message(response);
-  message.showMessage();
+  const message = new Message(response)
+  message.showMessage()
 
   clear('importacoes', tbody)
   show_importacoes()
 }
 
 async function show_importacoes() {
-  const importacoes = await requestServer('get', '/api/importacoes')
+  // await requestServer('get', '/api/importacoes')
+  const importacoes = await (await fetch('/api/importacoes')).json()
 
   //Adiciona Os valores na ui
   importacoes.forEach(({ data: { dataTransacao, dataImportacao } }) => {
@@ -49,9 +53,8 @@ function formatDate(date) {
   const dataImportacao = new Date(date)
 
   //Formata a data
-  const data = `${dataImportacao.getUTCDate()}/${
-    dataImportacao.getMonth() + 1
-  }/${dataImportacao.getFullYear()} - ${dataImportacao.getHours()}:${dataImportacao.getMinutes()}:${dataImportacao.getSeconds()}`
+  const data = `${dataImportacao.getUTCDate()}/${dataImportacao.getMonth() + 1
+    }/${dataImportacao.getFullYear()} - ${dataImportacao.getHours()}:${dataImportacao.getMinutes()}:${dataImportacao.getSeconds()}`
 
   return data
 }

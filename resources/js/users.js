@@ -1,11 +1,9 @@
 import { clear } from './utils/functions/clear'
-import { updateUi } from './utils/classes/updateUi'
 
 const tbody = document.querySelector('tbody')
-const { requestServer } = new updateUi(tbody)
 
 async function getAllusers() {
-  const users = await requestServer('get', '/api/users')
+  const users = await (await fetch('/api/users')).json()
 
   users.forEach(({ id, email, name }) => {
     let tr = document.createElement('tr')
@@ -24,6 +22,9 @@ async function getAllusers() {
                   type="button"
                   class="btn btn-info btn-sm"
                   id="btn-editar"
+                  value=${id}
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalUser"
                   >
                   <i class="fa-solid fa-user-pen"></i>
                   Editar
@@ -50,23 +51,43 @@ async function getAllusers() {
 
 getAllusers()
 
+//Evento de click dos Botoes de remover e editar
 document.addEventListener('click', async (e) => {
   if (e.target.id === 'btn-remover') {
-    await showModalUser(e.target.value)
+    await showModalUser(e.target.value, 'd')
+  } else if (e.target.id === 'btn-editar') {
+    await showModalUser(e.target.value, 'e')
   }
 })
 
-async function showModalUser(id) {
+//Mostrar Modal com os Dados Corretos
+async function showModalUser(id, operation) {
   const name = document.getElementById(id).innerText
   const modalTitle = document.getElementById('modalTitle')
   const modalBtn = document.getElementById('closeModal')
-  modalTitle.innerText = `Tem Certeza que quer deletar o usuario ${name}?`
 
-  modalBtn.value = id
-  modalBtn.addEventListener('click', deleteUser)
+  switch (operation) {
+    case 'd':
+      modalTitle.innerText = `Tem Certeza que quer deletar o usuario ${name}?`
+
+      modalBtn.value = id
+      modalBtn.addEventListener('click', deleteUser)
+      break
+    case 'e':
+      modalTitle.innerText = `Tem Certeza que quer editar o usuario ${name}?`
+      modalBtn.value = id
+      modalBtn.addEventListener('click', editUser)
+    default:
+      break
+  }
 }
 
-async function deleteUser({ target: { value } }) {
+//editar o usuario
+async function editUser({ target: { value } }/*  id do usuario */) {
+  console.log(value)
+}
+//Deletar o usuario
+async function deleteUser({ target: { value } }/*  id do usuario */) {
   await fetch(`/api/users/${value}`, {
     method: 'DELETE',
   })
