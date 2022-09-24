@@ -34,7 +34,7 @@ async function show_importacoes() {
   //Adiciona Os valores na ui
   importacoes.forEach(({ data: { dataTransacao, dataImportacao } }) => {
     const tr = document.createElement('tr')
-    tr.className = 'd-flex justify-content-between py-1 px-2 fs-4 fw-normal'
+    tr.className = 'container'
 
     const tdTransacao = document.createElement('td')
     const tdImportacao = document.createElement('td')

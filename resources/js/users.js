@@ -95,3 +95,13 @@ async function deleteUser({ target: { value } }/*  id do usuario */) {
   clear('users', tbody)
   await getAllusers()
 }
+
+
+async function getUserById(id) {
+  const user = await (await fetch(`/api/users/${id}`)).json()
+
+  //Pegar os dados e colocar em um form de edição
+  //Submeter o formulario
+  //Mostrar os novos dados na tela
+
+}
