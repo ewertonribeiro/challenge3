@@ -10,13 +10,15 @@ export default class UsersController {
   async index({ response }: HttpContextContract) {
     response.status(200)
 
-    //Filtra o Usuario Admin
-    const filteredUsers = await this.model.all()
-    return filteredUsers.filter(user=>user.name !== 'Admin')
+    //Filtra o Usuario Admin e os usuarios ativos
+    const users = await this.model.all()
+    const filteredUsers = users.filter((user) => user.name !== 'Admin').filter((user) => !user.ativo)
+
+    return response.json(filteredUsers)
   }
 
   async store({ request }: HttpContextContract) {
-    const { email, name } = request.body() as { email: string, name: string }
+    const { email, name } = request.body() as { email: string; name: string }
 
     if (!email || !name) {
       return new MyError('Nome e email são Obrigatórios!')
@@ -26,22 +28,30 @@ export default class UsersController {
       return new MyError('Email ja cadastrado na Base de Dados!')
     }
 
-    const senha = this.passFunction.newPassString();
+    const senha = this.passFunction.newPassString()
 
     await this.model.create({ name, email, senha })
     return new UserResponse(`Usuario cadastrado.Sua senha e : ${senha}`)
   }
 
-  async destroy({response,request}:HttpContextContract) {
+  async destroy({ response, request }: HttpContextContract) {
     const id = request.param('id') as string
 
-    //Verificar se o usuario existe
     //Verificar se e do admin e nao remover
+    if (Number(id) === 1) {
+      return response.status(400).json(new MyError('Nao e possivel excluir este usuario!'))
+    }
+    //Verificar se o usuario existe
+    const user = await this.model.findBy('id', id)
+    if (!user) {
+      return response.status(404).json(new MyError(`Usuário com o id: ${id} nao encontrado!`))
+    }
     //Verificar se e o id do usuario logado e nao remover
 
     //Apagar o usuario => torna-lo inativo
-
+    user.ativo = true
+    await user.save()
     //retornar a resposta
-    return response.json({id})
+    return response.json(new UserResponse(`Usuario com o id: ${id} deletado`))
   }
 }
