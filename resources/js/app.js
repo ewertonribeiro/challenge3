@@ -1,5 +1,5 @@
 import '../css/app.css'
-import { showMessage } from './utils/functions/showMessage'
+import Message from './utils/classes/showMessage';
 import { updateUi } from './utils/classes/updateUi'
 import { clear } from './utils/functions/clear'
 
@@ -18,7 +18,8 @@ async function handleSubmit(event) {
 
   inputTransaction.value = ''
   //Exibir a resposta em tela
-  showMessage(response)
+  const message = new Message(response);
+  message.showMessage();
   clear('importacoes', tbody)
   show_importacoes()
 }

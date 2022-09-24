@@ -29,6 +29,6 @@ export default class UsersController {
     const senha = this.passFunction.newPassString();
 
     await this.model.create({ name, email, senha })
-    return new UserResponse('Usuario cadastrado com sucesso!')
+    return new UserResponse(`Usuario cadastrado.Sua senha e : ${senha}`)
   }
 }
