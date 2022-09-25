@@ -1,4 +1,4 @@
-import Message from './utils/classes/showMessage';
+import Message from './utils/classes/showMessage'
 
 var signupForm = document.getElementById('user-form')
 
@@ -12,8 +12,7 @@ async function handleSubmit(event) {
     body: new FormData(this),
   })
 
-  const message = new Message(await response.json());
+  const message = new Message(await response.json())
 
-  message.showMessage();
-
+  message.showMessage()
 }

@@ -53,8 +53,9 @@ function formatDate(date) {
   const dataImportacao = new Date(date)
 
   //Formata a data
-  const data = `${dataImportacao.getUTCDate()}/${dataImportacao.getMonth() + 1
-    }/${dataImportacao.getFullYear()} - ${dataImportacao.getHours()}:${dataImportacao.getMinutes()}:${dataImportacao.getSeconds()}`
+  const data = `${dataImportacao.getUTCDate()}/${
+    dataImportacao.getMonth() + 1
+  }/${dataImportacao.getFullYear()} - ${dataImportacao.getHours()}:${dataImportacao.getMinutes()}:${dataImportacao.getSeconds()}`
 
   return data
 }
