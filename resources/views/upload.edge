@@ -112,6 +112,13 @@
         class="mt-5 fw-regular fs-5"
         id="tbody"
       >
+      @each(importacao in importacoes)
+        <tr class="container">
+         
+          <td>{{importacao.dataTransacao}}</td>
+          <td>{{importacao.dataImportacao}}</td>
+        </tr>
+      @endeach
 
       </tbody>
     </table>

@@ -11,53 +11,57 @@ form.addEventListener('submit', handleSubmit)
 
 async function handleSubmit(event) {
   event.preventDefault()
-  const response = await (
-    await fetch('/api/upload', {
-      method: 'POST',
-      body: new FormData(this),
-    })
-  ).json()
+  try {
+    const {
+      data: { error, message },
+    } = await (
+      await fetch('/api/upload', {
+        method: 'POST',
+        body: new FormData(this),
+      })
+    ).json()
 
-  inputTransaction.value = ''
-  //Exibir a resposta em tela
-  const message = new Message(response)
-  message.showMessage()
+    inputTransaction.value = ''
 
-  clear('importacoes', tbody)
-  show_importacoes()
+    if (error) {
+      throw new Error(message)
+    }
+
+    const msg = new Message({ error, message })
+    msg.showMessage()
+  } catch ({ message }) {
+    const msg = new Message({ error: true, message })
+    msg.showMessage()
+  }
+
+  // clear('importacoes', tbody)
+  // show_importacoes()
+
+  //Tratar a resposta
+  //Caso Seja de sucesso recarregar a pagina
+  //Erro mostrar a mensagem de erro
 }
 
-async function show_importacoes() {
-  // await requestServer('get', '/api/importacoes')
-  const importacoes = await (await fetch('/api/importacoes')).json()
+// async function show_importacoes() {
+//   // await requestServer('get', '/api/importacoes')
+//   const importacoes = await (await fetch('/api/importacoes')).json()
 
-  //Adiciona Os valores na ui
-  importacoes.forEach(({ data: { dataTransacao, dataImportacao } }) => {
-    const tr = document.createElement('tr')
-    tr.className = 'container'
+//   //Adiciona Os valores na ui
+//   importacoes.forEach(({ data: { dataTransacao, dataImportacao } }) => {
+//     const tr = document.createElement('tr')
+//     tr.className = 'container'
 
-    const tdTransacao = document.createElement('td')
-    const tdImportacao = document.createElement('td')
+//     const tdTransacao = document.createElement('td')
+//     const tdImportacao = document.createElement('td')
 
-    tdTransacao.innerText = dataTransacao
-    tdImportacao.innerText = formatDate(dataImportacao)
+//     tdTransacao.innerText = dataTransacao
+//     tdImportacao.innerText = formatDate(dataImportacao)
 
-    tr.appendChild(tdTransacao)
-    tr.appendChild(tdImportacao)
+//     tr.appendChild(tdTransacao)
+//     tr.appendChild(tdImportacao)
 
-    tbody.appendChild(tr)
-  })
-}
+//     tbody.appendChild(tr)
+//   })
+// }
 
-function formatDate(date) {
-  const dataImportacao = new Date(date)
-
-  //Formata a data
-  const data = `${dataImportacao.getUTCDate()}/${
-    dataImportacao.getMonth() + 1
-  }/${dataImportacao.getFullYear()} - ${dataImportacao.getHours()}:${dataImportacao.getMinutes()}:${dataImportacao.getSeconds()}`
-
-  return data
-}
-
-show_importacoes()
+// show_importacoes()

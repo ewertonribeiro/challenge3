@@ -67,6 +67,40 @@
           class="mt-1"
           id="users-tbody">
 
+          @each(user in users)
+          <tr  id="users-tr">
+            <td>{{user.id}}</td>
+            <td id={{user.id}}>{{user.name}}</td>
+            <td>{{user.email}}</td>
+            <td>
+              <div class="users-table-btns">
+                <button
+                  type="button"
+                  class="btn btn-info btn-sm"
+                  id="btn-editar"
+                  value={{user.id}}
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalUser"
+                  >
+                  <i class="fa-solid fa-user-pen"></i>
+                  Editar
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  id="btn-remover"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalUser"
+                  value={{user.id}}
+                  >
+                  <i class="fa-solid fa-trash"></i>
+                  Remover
+                </button>
+              </div>
+            </td>
+          </tr>
+          @endeach
+
         </tbody>
 
       </table>

@@ -7,17 +7,17 @@ export default class UsersController {
   private model = User
   private passFunction = new Password()
 
-  async index({ response }: HttpContextContract) {
-    response.status(200)
-
+  public async index({ response }: HttpContextContract) {
     //Filtra o Usuario Admin e os usuarios ativos
     const users = await this.model.all()
-    const filteredUsers = users.filter((user) => user.name !== 'Admin').filter((user) => !user.ativo)
-
-    return response.json(filteredUsers)
+    const filteredUsers = users
+      .filter((user) => user.name !== 'Admin')
+      .filter((user) => !user.ativo)
+    response.status(200)
+    return filteredUsers
   }
 
-  async store({ request }: HttpContextContract) {
+  public async store({ request }: HttpContextContract) {
     const { email, name } = request.body() as { email: string; name: string }
 
     if (!email || !name) {
@@ -34,7 +34,7 @@ export default class UsersController {
     return new UserResponse(`Usuario cadastrado.Sua senha e : ${senha}`)
   }
 
-  async destroy({ response, request }: HttpContextContract) {
+  public async destroy({ response, request }: HttpContextContract) {
     const id = request.param('id') as string
 
     //Verificar se e do admin e nao remover

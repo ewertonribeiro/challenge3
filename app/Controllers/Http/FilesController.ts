@@ -20,7 +20,7 @@ interface Transacao {
 export default class FilesController {
   public async store({ request, response }: HttpContextContract) {
     const file = request.file('file', { extnames: ['csv'], size: '3mb' })
-console.log(request)
+
     //Valida O Arquivo
     if (!file) {
       response.status(400)
@@ -62,7 +62,6 @@ console.log(request)
     } catch {
       return new MyError('Problema ao Insesir no Banco , Verifique o Arquivo e tente novamente.')
     }
-
   }
 
   private filterTransactions(transacoes: Transacao[], validDate: string) {

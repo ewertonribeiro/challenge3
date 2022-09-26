@@ -5,7 +5,7 @@ export default class ShowMessage {
 
   data
 
-  constructor({ data }) {
+  constructor(data) {
     this.btn.addEventListener('click', () => this.clearMessage())
 
     this.data = data
