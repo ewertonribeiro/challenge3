@@ -11,8 +11,9 @@ async function handleSubmit(event) {
     method: 'post',
     body: new FormData(this),
   })
+  const { data } = await response.json()
 
-  const message = new Message(await response.json())
+  const message = new Message(data)
 
   message.showMessage()
 }

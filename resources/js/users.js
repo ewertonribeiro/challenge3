@@ -5,9 +5,9 @@ const tbody = document.querySelector('tbody')
 //Evento de click dos Botoes de remover e editar
 document.addEventListener('click', async (e) => {
   if (e.target.id === 'btn-remover') {
-    await showModalUser(e.target.value, 'd')
+    await showModalUser(e.target.value, 'delete')
   } else if (e.target.id === 'btn-editar') {
-    await showModalUser(e.target.value, 'e')
+    await showModalUser(e.target.value, 'editar')
   }
 })
 
@@ -18,15 +18,16 @@ async function showModalUser(id, operation) {
   const modalBtn = document.getElementById('closeModal')
 
   switch (operation) {
-    case 'd':
+    case 'delete':
       modalTitle.innerText = `Tem Certeza que quer deletar o usuario ${name}?`
-
       modalBtn.value = id
+      modalBtn.removeEventListener('click', editUser)
       modalBtn.addEventListener('click', deleteUser)
       break
-    case 'e':
+    case 'editar':
       modalTitle.innerText = `Tem Certeza que quer editar o usuario ${name}?`
       modalBtn.value = id
+      modalBtn.removeEventListener('click', deleteUser)
       modalBtn.addEventListener('click', editUser)
       break
     default:
@@ -38,14 +39,15 @@ async function showModalUser(id, operation) {
 async function editUser({ target: { value } } /*  id do usuario */) {
   console.log(value)
 }
+
 //Deletar o usuario
 async function deleteUser({ target: { value } } /*  id do usuario */) {
+  const trUser = document.getElementById(value).parentElement
+  trUser.remove()
+
   await fetch(`/api/users/${value}`, {
     method: 'DELETE',
   })
-  const tbody = document.getElementById('users-tbody')
-  clear('users', tbody)
-  await getAllusers()
 }
 
 async function getUserById(id) {

@@ -7,32 +7,15 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              @each(item in routes)
               <li class="nav-item">
-                @if(active === 'upload')
-                  <a class="nav-link active" aria-current="page" href="/upload">Importações</a>
+                @if(item.url === request.url() )
+                  <a class="nav-link active" aria-current="page" href={{item.url}}>{{item.text}}</a>
                 @else
-                  <a class="nav-link" aria-current="page" href="/upload">Importações</a>
+                <a class="nav-link" aria-current="page" href={{item.url}}>{{item.text}}</a>
                 @endif
               </li>
-
-             
-              <li class="nav-item">
-                @if(active === 'users')
-                <a class="nav-link active" href="/users">Usuários</a>      
-                @else
-                <a class="nav-link" href="/users">Usuários</a>
-                @endif
-              </li>
-         
-
-             <li class="nav-item">
-               @if(active === 'signup')
-                 <a href="/signup" class="nav-link active">Cadastrar Usuario</a>
-               @else
-                 <a href="/signup" class="nav-link">Cadastrar Usuario</a>
-               @endif
-             </li>
-
+              @endeach
             </ul>
 
           </div>
