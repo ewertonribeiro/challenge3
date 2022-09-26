@@ -19,9 +19,7 @@ class ImportacaoResponse {
 
   public formatDate(dataImportacao: DateTime) {
     //Formata a data
-    const data = `${dataImportacao.day}/${dataImportacao.month + 1}/${dataImportacao.year} - ${
-      dataImportacao.hour
-    }:${dataImportacao.minute}:${dataImportacao.second}`
+    const data = `${dataImportacao.day}/${dataImportacao.month}/${dataImportacao.year} - ${dataImportacao.hour}:${dataImportacao.minute}:${dataImportacao.second}`
 
     return data
   }

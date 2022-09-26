@@ -29,39 +29,32 @@ async function handleSubmit(event) {
 
     const msg = new Message({ error, message })
     msg.showMessage()
+    show_importacoes()
   } catch ({ message }) {
     const msg = new Message({ error: true, message })
     msg.showMessage()
   }
-
-  // clear('importacoes', tbody)
-  // show_importacoes()
-
-  //Tratar a resposta
-  //Caso Seja de sucesso recarregar a pagina
-  //Erro mostrar a mensagem de erro
 }
 
-// async function show_importacoes() {
-//   // await requestServer('get', '/api/importacoes')
-//   const importacoes = await (await fetch('/api/importacoes')).json()
+async function show_importacoes() {
+  const { data } = await (await fetch('/api/importacoes')).json()
 
-//   //Adiciona Os valores na ui
-//   importacoes.forEach(({ data: { dataTransacao, dataImportacao } }) => {
-//     const tr = document.createElement('tr')
-//     tr.className = 'container'
+  //Limpa a Tabela
+  clear('importacoes', tbody)
+  //Adiciona Os valores na ui
+  data.forEach(({ dataTransacao, dataImportacao }) => {
+    const tr = document.createElement('tr')
+    tr.className = 'container'
 
-//     const tdTransacao = document.createElement('td')
-//     const tdImportacao = document.createElement('td')
+    const tdTransacao = document.createElement('td')
+    const tdImportacao = document.createElement('td')
 
-//     tdTransacao.innerText = dataTransacao
-//     tdImportacao.innerText = formatDate(dataImportacao)
+    tdTransacao.innerText = dataTransacao
+    tdImportacao.innerText = dataImportacao
 
-//     tr.appendChild(tdTransacao)
-//     tr.appendChild(tdImportacao)
+    tr.appendChild(tdTransacao)
+    tr.appendChild(tdImportacao)
 
-//     tbody.appendChild(tr)
-//   })
-// }
-
-// show_importacoes()
+    tbody.appendChild(tr)
+  })
+}
