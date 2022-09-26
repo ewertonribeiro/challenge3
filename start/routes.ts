@@ -19,24 +19,12 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-//home
-Route.get('/', async ({ view }) => view.render('home'))
+import Hash from '@ioc:Adonis/Core/Hash'
+import User from 'App/Models/User'
 
-//Users
-Route.get('/signup', async ({ view }) => view.render('signup'))
-Route.get('/users', async (http) => {
-  const { default: UserController } = await import('App/Controllers/Http/UsersController')
-
-  const controller = new UserController()
-
-  return http.view.render('users', {
-    users: await controller.index(http),
-  })
-})
-Route.resource('/api/users', 'UsersController').apiOnly()
-
-//Upload de Transação
-Route.get('/upload', async (http) => {
+//Home
+Route.get('/', async (http) => {
+  await http.auth.use('web').authenticate()
   const { default: ImportacoesController } = await import(
     'App/Controllers/Http/ImportacoesController'
   )
@@ -47,5 +35,42 @@ Route.get('/upload', async (http) => {
     importacoes: importacoes.data,
   })
 })
+
+//Users
+Route.get('/signup', async ({ view, auth }) => {
+  await auth.use('web').authenticate()
+  return view.render('signup')
+})
+
+Route.get('/users', async (http) => {
+  await http.auth.use('web').authenticate()
+  const { default: UserController } = await import('App/Controllers/Http/UsersController')
+
+  const controller = new UserController()
+
+  return http.view.render('users', {
+    users: await controller.index(http),
+  })
+})
+Route.resource('/api/users', 'UsersController').apiOnly()
+
 Route.post('/api/upload', 'FilesController.store')
 Route.get('/api/importacoes', 'ImportacoesController.index')
+
+//Rotas de login Auth
+Route.post('/api/login', async ({ request, auth, response }) => {
+  const email = request.input('email')
+  const password = request.input('password')
+
+  //Tratar caso o usuario nao exista
+  const user = await User.query().where('email', email).firstOrFail()
+
+  if (!(await Hash.verify(user.senha, password))) {
+    //Retornar a Resposta Padronizada
+    return response.badRequest('Invalid credentials')
+  }
+
+  await auth.use('web').login(user)
+  response.redirect('/upload')
+})
+Route.get('/login', async ({ view }) => view.render('login'))

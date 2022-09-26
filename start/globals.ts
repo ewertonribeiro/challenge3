@@ -2,7 +2,7 @@ import View from '@ioc:Adonis/Core/View'
 
 View.global('routes', [
   {
-    url: '/upload',
+    url: '/',
     text: 'Importações',
   },
   {
