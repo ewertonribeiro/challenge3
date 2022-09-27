@@ -18,9 +18,9 @@
         "http://localhost:8080/assets/signup.js"
       ]
     },
-    "home": {
+    "login": {
       "js": [
-        "http://localhost:8080/assets/home.js"
+        "http://localhost:8080/assets/login.js"
       ]
     }
   }

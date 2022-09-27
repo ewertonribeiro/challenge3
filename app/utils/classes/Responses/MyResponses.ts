@@ -7,20 +7,25 @@ export class MyError extends Response {
 }
 
 export class FileResponse extends Response {
-  private size: number;
-  private fileName?: string;
-
-
   constructor(message: string, size: number, fileName?: string) {
-    super(message);
-    this.size = size;
-    this.fileName = fileName;
-    Object.assign(this.data, this.fileName, this.size);
+    super(message,false,{size,fileName})
   }
 }
 
 export class UserResponse extends Response {
   constructor(message: string) {
-    super(message);
+    super(message)
+  }
+}
+
+type User = {
+  name: string
+  email: string
+  id: number
+}
+
+export class LoginResponse extends Response {
+  constructor(message: string, user: User) {
+    super(message,false,{user})
   }
 }

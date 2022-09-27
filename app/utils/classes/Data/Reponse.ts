@@ -3,10 +3,11 @@ export default class Response {
     error: boolean
     message: string
   }
-  constructor(message: string, error = false) {
+  constructor(message: string, error = false,data?:any) {
     this.data = {
       error:error,
-      message:message
+      message:message,
+      ...(data && {...data})
     }
   }
 }

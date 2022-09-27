@@ -1,0 +1,32 @@
+import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Hash from '@ioc:Adonis/Core/Hash'
+import User from 'App/Models/User'
+import { LoginResponse, MyError } from 'App/utils/classes/Responses/MyResponses'
+
+export default class AuthController {
+  public async store({ request, response, auth}: HttpContextContract) {
+    const email = request.input('email')
+    const password = request.input('password')
+
+    //Tratar caso o usuario nao exista
+    const user = await User.query().where('email', email).first()
+
+    if (!user) {
+      return response.status(400).json(new MyError('Email ou senha inválido!'))
+    }
+
+    if (!(await Hash.verify(user.senha, password))) {
+      return response.status(400).json(new MyError('Email ou senha inválido!'))
+    }
+
+    // const rememberMe = true
+    await auth.use('web').login(user)
+
+    return response.status(201).json(new LoginResponse('Usuario Logado com Sucesso!',{
+      id:user.id,
+      name:user.name,
+      email:user.email
+    }))
+
+  }
+}

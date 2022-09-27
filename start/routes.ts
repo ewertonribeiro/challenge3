@@ -19,12 +19,9 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-import Hash from '@ioc:Adonis/Core/Hash'
-import User from 'App/Models/User'
 
 //Home
 Route.get('/', async (http) => {
-  await http.auth.use('web').authenticate()
   const { default: ImportacoesController } = await import(
     'App/Controllers/Http/ImportacoesController'
   )
@@ -34,16 +31,12 @@ Route.get('/', async (http) => {
   return http.view.render('upload', {
     importacoes: importacoes.data,
   })
-})
+}).middleware('auth')
 
 //Users
-Route.get('/signup', async ({ view, auth }) => {
-  await auth.use('web').authenticate()
-  return view.render('signup')
-})
+Route.get('/signup', async ({ view }) => view.render('signup')).middleware('auth')
 
 Route.get('/users', async (http) => {
-  await http.auth.use('web').authenticate()
   const { default: UserController } = await import('App/Controllers/Http/UsersController')
 
   const controller = new UserController()
@@ -51,26 +44,14 @@ Route.get('/users', async (http) => {
   return http.view.render('users', {
     users: await controller.index(http),
   })
-})
+}).middleware('auth')
+
 Route.resource('/api/users', 'UsersController').apiOnly()
 
 Route.post('/api/upload', 'FilesController.store')
 Route.get('/api/importacoes', 'ImportacoesController.index')
 
 //Rotas de login Auth
-Route.post('/api/login', async ({ request, auth, response }) => {
-  const email = request.input('email')
-  const password = request.input('password')
+Route.post('/api/login', 'AuthController.store')
 
-  //Tratar caso o usuario nao exista
-  const user = await User.query().where('email', email).firstOrFail()
-
-  if (!(await Hash.verify(user.senha, password))) {
-    //Retornar a Resposta Padronizada
-    return response.badRequest('Invalid credentials')
-  }
-
-  await auth.use('web').login(user)
-  response.redirect('/upload')
-})
 Route.get('/login', async ({ view }) => view.render('login'))
