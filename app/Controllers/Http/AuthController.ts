@@ -1,10 +1,10 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Hash from '@ioc:Adonis/Core/Hash'
 import User from 'App/Models/User'
-import { LoginResponse, MyError } from 'App/utils/classes/Responses/MyResponses'
+import { LoginResponse, MyError, UserResponse } from 'App/utils/classes/Responses/MyResponses'
 
 export default class AuthController {
-  public async store({ request, response, auth}: HttpContextContract) {
+  public async store({ request, response, auth }: HttpContextContract) {
     const email = request.input('email')
     const password = request.input('password')
 
@@ -22,11 +22,18 @@ export default class AuthController {
     // const rememberMe = true
     await auth.use('web').login(user)
 
-    return response.status(201).json(new LoginResponse('Usuario Logado com Sucesso!',{
-      id:user.id,
-      name:user.name,
-      email:user.email
-    }))
+    return response.status(201).json(
+      new LoginResponse('Usuario Logado com Sucesso!', {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      })
+    )
+  }
 
+  public async destroy({ auth, response }: HttpContextContract) {
+    await auth.use('web').logout()
+
+    return response.json(new UserResponse('Usuario Deslogado!'))
   }
 }

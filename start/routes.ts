@@ -53,5 +53,6 @@ Route.get('/api/importacoes', 'ImportacoesController.index')
 
 //Rotas de login Auth
 Route.post('/api/login', 'AuthController.store')
+Route.delete('/api/logout', 'AuthController.destroy')
 
 Route.get('/login', async ({ view }) => view.render('login'))

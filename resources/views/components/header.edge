@@ -5,8 +5,8 @@
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ">
               @each(item in routes)
               <li class="nav-item">
                 @if(item.url === request.url() )
@@ -16,9 +16,16 @@
                 @endif
               </li>
               @endeach
-            </ul>
 
+            </ul>
+            @if(auth.isLoggedIn)
+            <div class="btn-group">
+              <span class="text-white bg-secondary p-2 rounded">Bem Vindo {{ auth.user.name }}</span>
+              <button class="btn btn-sm btn-outline-danger" id="logout-btn">Sair</button>
+            </div>
+            @endif
           </div>
         </div>
       </nav>
+      @entryPointScripts('logout')
 </header>

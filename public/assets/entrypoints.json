@@ -22,6 +22,11 @@
       "js": [
         "http://localhost:8080/assets/login.js"
       ]
+    },
+    "logout": {
+      "js": [
+        "http://localhost:8080/assets/logout.js"
+      ]
     }
   }
 }

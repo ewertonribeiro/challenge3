@@ -8,7 +8,7 @@ export class MyError extends Response {
 
 export class FileResponse extends Response {
   constructor(message: string, size: number, fileName?: string) {
-    super(message,false,{size,fileName})
+    super(message, false, { size, fileName })
   }
 }
 
@@ -26,6 +26,6 @@ type User = {
 
 export class LoginResponse extends Response {
   constructor(message: string, user: User) {
-    super(message,false,{user})
+    super(message, false, { user })
   }
 }

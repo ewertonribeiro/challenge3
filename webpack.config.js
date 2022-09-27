@@ -49,6 +49,8 @@ Encore.addEntry('app', './resources/js/app.js')
 Encore.addEntry('users', './resources/js/users.js')
 Encore.addEntry('signup', './resources/js/signup.js')
 Encore.addEntry('login', './resources/js/login.js')
+Encore.addEntry('logout', './resources/js/logout.js')
+
 /*
 |--------------------------------------------------------------------------
 | Copy assets

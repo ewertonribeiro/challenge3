@@ -1,4 +1,4 @@
-; (function() {
+;(function () {
   'use strict'
 
   // Fetch all the forms we want to apply custom Bootstrap validation styles to
@@ -8,7 +8,7 @@
 
   form.addEventListener(
     'submit',
-    async function(event) {
+    async function (event) {
       if (form.checkValidity()) {
         event.preventDefault()
         event.stopPropagation()
