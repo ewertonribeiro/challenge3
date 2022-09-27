@@ -10,6 +10,7 @@ export default class Users extends BaseSchema {
       table.string('email').notNullable().unique()
       table.string('senha').notNullable()
       table.boolean('ativo').defaultTo(false)
+      table.boolean('deleted').defaultTo(false)
       /**
        * Uses timestamptz for PostgreSQL and DATETIME2 for MSSQL
        */
@@ -17,8 +18,10 @@ export default class Users extends BaseSchema {
       table.timestamp('updated_at', { useTz: true })
     })
 
-    this.defer(async db=> {
-      await db.table('users').insert({name:'Admin',email:'admin@email.com.br',senha:'123999'});
+    this.defer(async (db) => {
+      await db
+        .table('users')
+        .insert({ name: 'Admin', email: 'admin@email.com.br', senha: '123999', ativo: true })
     })
   }
 

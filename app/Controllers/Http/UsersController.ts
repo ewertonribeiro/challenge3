@@ -11,8 +11,10 @@ export default class UsersController {
     //Filtra o Usuario Admin e os usuarios ativos
     const users = await this.model.all()
     const filteredUsers = users
-      .filter((user) => user.name !== 'Admin')
-      .filter((user) => !user.ativo)
+      // .filter((user) => user.name !== 'Admin')
+      .filter((user) => user.ativo)
+      .filter((user) => !user.deleted)
+      .sort((a, b) => a.id - b.id)
     response.status(200)
     return filteredUsers
   }
@@ -49,7 +51,7 @@ export default class UsersController {
     //Verificar se e o id do usuario logado e nao remover
 
     //Apagar o usuario => torna-lo inativo
-    user.ativo = true
+    user.deleted = true
     await user.save()
     //retornar a resposta
     return response.json(new UserResponse(`Usuario com o id: ${id} deletado`))

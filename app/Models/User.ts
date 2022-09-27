@@ -18,6 +18,9 @@ export default class User extends BaseModel {
   @column()
   public ativo: boolean
 
+  @column()
+  public deleted: boolean
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime
 
@@ -27,7 +30,7 @@ export default class User extends BaseModel {
   @beforeSave()
   public static async hashPassword(user: User) {
     if (user.$dirty.senha) {
-      user.senha = await Hash.make(user.senha);
+      user.senha = await Hash.make(user.senha)
     }
   }
 }

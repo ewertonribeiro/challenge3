@@ -34,7 +34,7 @@ async function login(form) {
     ).json()
 
     if (response.data.error) {
-      throw new Error(data.message)
+      throw new Error(response.data.message)
     }
 
     window.location.assign('/')
